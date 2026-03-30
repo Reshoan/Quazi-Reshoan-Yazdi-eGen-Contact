@@ -293,7 +293,7 @@
 
     <div class="avatar-wrap">
       <div class="avatar-ring"></div>
-      <img class="avatar" src="egen.jpeg" alt="Quazi Reshoan Yazdi">
+      <img class="avatar" src="propic.png" alt="Quazi Reshoan Yazdi">
     </div>
 
     <h1>Quazi Reshoan Yazdi</h1>
@@ -323,7 +323,7 @@
       </div>
       <div class="contact-row">
         <span class="icon-dot">📧</span>
-        <a href="mailto:quazi.reshoan@egeneration.co">quazi.reshoan@egeneration.co</a>
+        <a href="/cdn-cgi/l/email-protection#28595d495241065a4d5b40474946684d4f4d464d5a495c414746064b47"><span class="__cf_email__" data-cfemail="047571657e6d2a7661776c6b656a446163616a617665706d6b6a2a676b">[email&#160;protected]</span></a>
       </div>
       <div class="contact-row">
         <span class="icon-dot">🔗</span>
@@ -340,24 +340,69 @@
   </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 (function() {
   const canvas = document.getElementById('pixelCanvas');
   const colors = ['#7ab527','#3d9bd4','#f5a800','#5a8a1a','#2a72a0'];
   const sizes  = [8, 12, 16, 20];
-  const svgNS  = 'http://www.w3.org/2000/svg';
-  const svg    = document.createElementNS(svgNS, 'svg');
-  svg.style.cssText = 'position:absolute;inset:0;width:100%;height:100%';
+
+  /* Inject keyframes for pixel drift into a <style> tag */
+  const style = document.createElement('style');
+  let kfCSS = '';
+  const VARIANTS = 12;
+  for (let v = 0; v < VARIANTS; v++) {
+    const dx1 = (Math.random()*60-30).toFixed(1);
+    const dy1 = (Math.random()*60-30).toFixed(1);
+    const dx2 = (Math.random()*60-30).toFixed(1);
+    const dy2 = (Math.random()*60-30).toFixed(1);
+    const dx3 = (Math.random()*60-30).toFixed(1);
+    const dy3 = (Math.random()*60-30).toFixed(1);
+    const r1  = (Math.random()*20-10).toFixed(1);
+    const r2  = (Math.random()*20-10).toFixed(1);
+    kfCSS += `
+    @keyframes px${v} {
+      0%   { transform: translate(0px, 0px) rotate(0deg); }
+      25%  { transform: translate(${dx1}px, ${dy1}px) rotate(${r1}deg); }
+      50%  { transform: translate(${dx2}px, ${dy2}px) rotate(${r2}deg); }
+      75%  { transform: translate(${dx3}px, ${dy3}px) rotate(${r1}deg); }
+      100% { transform: translate(0px, 0px) rotate(0deg); }
+    }`;
+  }
+  /* Circuit layer slow drift */
+  kfCSS += `
+  @keyframes circuitDrift {
+    0%   { transform: translate(0px,   0px)   rotate(0deg); }
+    33%  { transform: translate(18px,  12px)  rotate(0.4deg); }
+    66%  { transform: translate(-12px, 20px)  rotate(-0.3deg); }
+    100% { transform: translate(0px,   0px)   rotate(0deg); }
+  }
+  .circuit-lines { animation: circuitDrift 28s ease-in-out infinite; }
+  `;
+  style.textContent = kfCSS;
+  document.head.appendChild(style);
+
+  /* Build SVG with individually animating pixel rects */
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const svg   = document.createElementNS(svgNS, 'svg');
+  svg.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;overflow:visible';
+
   for (let i = 0; i < 55; i++) {
-    const r = document.createElementNS(svgNS,'rect');
-    const s = sizes[Math.floor(Math.random()*sizes.length)];
-    r.setAttribute('x',      (Math.random()*100)+'%');
-    r.setAttribute('y',      (Math.random()*100)+'%');
+    const r    = document.createElementNS(svgNS,'rect');
+    const s    = sizes[Math.floor(Math.random()*sizes.length)];
+    const v    = Math.floor(Math.random()*VARIANTS);
+    const dur  = (14 + Math.random()*18).toFixed(1);
+    const del  = (Math.random()*12).toFixed(1);
+
+    r.setAttribute('x',      (Math.random()*98)+'%');
+    r.setAttribute('y',      (Math.random()*98)+'%');
     r.setAttribute('width',  s);
     r.setAttribute('height', s);
     r.setAttribute('rx',     2);
     r.setAttribute('fill',   colors[Math.floor(Math.random()*colors.length)]);
-    r.setAttribute('opacity',(0.07+Math.random()*0.1).toFixed(2));
+    r.setAttribute('opacity',(0.08+Math.random()*0.11).toFixed(2));
+    r.style.animation = `px${v} ${dur}s ${del}s ease-in-out infinite`;
+    r.style.transformBox      = 'fill-box';
+    r.style.transformOrigin   = 'center';
     svg.appendChild(r);
   }
   canvas.appendChild(svg);
@@ -376,13 +421,4 @@ EMAIL;TYPE=WORK:quazi.reshoan@egeneration.co
 URL:https://www.linkedin.com/in/quazi-reshoan-yazdi-dhaka1207
 END:VCARD`;
 
-  const a = document.createElement('a');
-  a.href     = 'data:text/vcard;charset=utf-8,' + encodeURIComponent(vcard);
-  a.download = 'Quazi_Reshoan_Yazdi_eGeneration.vcf';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-}
-</script>
-</body>
-</html>
+  const a = docu
