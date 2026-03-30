@@ -12,8 +12,6 @@
     --eg-blue:       #3d9bd4;
     --eg-orange:     #f5a800;
     --eg-green-dark: #5a8a1a;
-    --eg-blue-dark:  #2a72a0;
-
     --bg1:         #e8f5d0;
     --bg2:         #cce8a0;
     --card:        rgba(255,255,255,0.60);
@@ -24,9 +22,7 @@
     --glow:        rgba(122,181,39,0.35);
     --footer-color:#4a7515;
   }
-
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   html, body {
     min-height: 100%;
     background: linear-gradient(145deg, var(--bg1) 0%, var(--bg2) 100%);
@@ -43,24 +39,32 @@
     position: relative;
     overflow-x: hidden;
   }
-
-  .pixel-canvas {
+  #pixelCanvas {
     position: fixed;
     inset: 0;
+    width: 100%;
+    height: 100%;
     pointer-events: none;
     z-index: 0;
-    overflow: hidden;
   }
-
   .circuit-lines {
     position: fixed;
     inset: 0;
+    width: 100%;
+    height: 100%;
     pointer-events: none;
-    z-index: 0;
-    opacity: 0.12;
+    z-index: 1;
+    opacity: 0.13;
+    animation: circuitDrift 30s ease-in-out infinite;
   }
   .circuit-lines svg { width: 100%; height: 100%; }
-
+  @keyframes circuitDrift {
+    0%   { transform: translate(0px,   0px)  rotate(0deg);    }
+    25%  { transform: translate(20px,  14px) rotate(0.4deg);  }
+    50%  { transform: translate(-8px,  24px) rotate(-0.3deg); }
+    75%  { transform: translate(14px, -8px)  rotate(0.2deg);  }
+    100% { transform: translate(0px,   0px)  rotate(0deg);    }
+  }
   .glass-card {
     position: relative;
     z-index: 10;
@@ -72,10 +76,7 @@
     padding: 40px 32px 36px;
     max-width: 460px;
     width: 100%;
-    box-shadow:
-      0 0 0 1px var(--card-border),
-      0 8px 40px rgba(0,0,0,0.12),
-      0 2px 8px rgba(0,0,0,0.06);
+    box-shadow: 0 0 0 1px var(--card-border), 0 8px 40px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06);
     animation: float 7s ease-in-out infinite;
   }
   .glass-card::before {
@@ -88,194 +89,82 @@
     filter: blur(24px);
     opacity: 0.6;
   }
-
   @keyframes float {
     0%,100% { transform: translateY(0px); }
     50%      { transform: translateY(-8px); }
   }
-
-  .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  .avatar-wrap {
-    position: relative;
-    margin-bottom: 16px;
-  }
+  .container { display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .avatar-wrap { position: relative; margin-bottom: 16px; }
   .avatar-ring {
-    position: absolute;
-    inset: -5px;
-    border-radius: 50%;
-    background: conic-gradient(
-      var(--eg-green)  0deg 120deg,
-      var(--eg-blue)   120deg 240deg,
-      var(--eg-orange) 240deg 360deg
-    );
-    animation: spin-ring 8s linear infinite;
-    z-index: -1;
+    position: absolute; inset: -5px; border-radius: 50%;
+    background: conic-gradient(var(--eg-green) 0deg 120deg, var(--eg-blue) 120deg 240deg, var(--eg-orange) 240deg 360deg);
+    animation: spin-ring 8s linear infinite; z-index: -1;
   }
   @keyframes spin-ring { to { transform: rotate(360deg); } }
-
   img.avatar {
-    width: 130px;
-    height: 130px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 4px solid rgba(255,255,255,0.95);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.18);
-    display: block;
-    position: relative;
+    width: 130px; height: 130px; border-radius: 50%; object-fit: cover;
+    border: 4px solid rgba(255,255,255,0.95); box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+    display: block; position: relative;
   }
-
   h1 {
-    font-family: 'Space Mono', monospace;
-    font-size: 1.25rem;
-    letter-spacing: -0.01em;
-    color: var(--text);
-    margin-top: 4px;
-    margin-bottom: 2px;
-    line-height: 1.3;
+    font-family: 'Space Mono', monospace; font-size: 1.25rem;
+    letter-spacing: -0.01em; color: var(--text); margin-top: 4px; margin-bottom: 2px; line-height: 1.3;
   }
-
   .role-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
+    display: inline-flex; align-items: center; gap: 6px;
     background: linear-gradient(135deg, var(--eg-green), var(--eg-blue));
-    color: #fff;
-    font-size: 0.78rem;
-    font-weight: 600;
-    padding: 4px 14px;
-    border-radius: 999px;
-    margin: 10px 0 14px;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
+    color: #fff; font-size: 0.78rem; font-weight: 600; padding: 4px 14px;
+    border-radius: 999px; margin: 10px 0 14px; letter-spacing: 0.04em; text-transform: uppercase;
     box-shadow: 0 2px 8px rgba(61,155,212,0.3);
   }
-
   .org-block { margin-bottom: 12px; }
   .org-name {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: var(--eg-green-dark);
-    letter-spacing: 0.02em;
-    margin-bottom: 3px;
+    font-family: 'Space Mono', monospace; font-size: 0.9rem; font-weight: 700;
+    color: var(--eg-green-dark); letter-spacing: 0.02em; margin-bottom: 3px;
   }
-  .dept {
-    font-size: 0.82rem;
-    color: var(--subtext);
-    line-height: 1.5;
-  }
-
+  .dept { font-size: 0.82rem; color: var(--subtext); line-height: 1.5; }
   .divider {
-    width: 100%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--card-border), transparent);
-    margin: 14px 0;
+    width: 100%; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--card-border), transparent); margin: 14px 0;
   }
-
-  .contact-list {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 9px;
-    margin-bottom: 4px;
-  }
-  .contact-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 0.88rem;
-    color: var(--subtext);
-  }
+  .contact-list { width: 100%; display: flex; flex-direction: column; gap: 9px; margin-bottom: 4px; }
+  .contact-row { display: flex; align-items: center; gap: 10px; font-size: 0.88rem; color: var(--subtext); }
   .contact-row .icon-dot {
-    width: 30px;
-    height: 30px;
-    flex-shrink: 0;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.9rem;
-    background: rgba(122,181,39,0.12);
+    width: 30px; height: 30px; flex-shrink: 0; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem; background: rgba(122,181,39,0.12);
   }
-  .contact-row a {
-    color: var(--link);
-    text-decoration: none;
-  }
+  .contact-row a { color: var(--link); text-decoration: none; }
   .contact-row a:hover { text-decoration: underline; }
-
   .wa-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 3px;
-    background: rgba(37,211,102,0.15);
-    color: #1da851;
-    font-size: 0.68rem;
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 999px;
-    margin-left: 6px;
-    letter-spacing: 0.04em;
-    vertical-align: middle;
+    display: inline-flex; align-items: center; gap: 3px;
+    background: rgba(37,211,102,0.15); color: #1da851; font-size: 0.68rem; font-weight: 700;
+    padding: 2px 8px; border-radius: 999px; margin-left: 6px; letter-spacing: 0.04em; vertical-align: middle;
   }
-
   .save-btn {
-    margin-top: 20px;
-    width: 100%;
+    margin-top: 20px; width: 100%;
     background: linear-gradient(135deg, var(--eg-green) 0%, var(--eg-blue) 100%);
-    color: #fff;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.98rem;
-    font-weight: 600;
-    border: none;
-    border-radius: 14px;
-    padding: 15px 28px;
-    cursor: pointer;
-    letter-spacing: 0.02em;
-    box-shadow: 0 4px 18px rgba(122,181,39,0.35);
-    transition: transform 0.18s, box-shadow 0.18s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+    color: #fff; font-family: 'DM Sans', sans-serif; font-size: 0.98rem; font-weight: 600;
+    border: none; border-radius: 14px; padding: 15px 28px; cursor: pointer; letter-spacing: 0.02em;
+    box-shadow: 0 4px 18px rgba(122,181,39,0.35); transition: transform 0.18s, box-shadow 0.18s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
   }
-  .save-btn:hover {
-    transform: translateY(-2px) scale(1.01);
-    box-shadow: 0 8px 28px rgba(61,155,212,0.4);
-  }
+  .save-btn:hover { transform: translateY(-2px) scale(1.01); box-shadow: 0 8px 28px rgba(61,155,212,0.4); }
   .save-btn:active { transform: scale(0.98); }
-
-  footer {
-    margin-top: 16px;
-    font-size: 0.72rem;
-    color: var(--footer-color);
-    opacity: 0.75;
-    letter-spacing: 0.04em;
-    text-align: center;
-    width: 100%;
-  }
+  footer { margin-top: 16px; font-size: 0.72rem; color: var(--footer-color); opacity: 0.75; letter-spacing: 0.04em; text-align: center; width: 100%; }
 </style>
 </head>
 <body>
 
-<div class="pixel-canvas" id="pixelCanvas"></div>
+<canvas id="pixelCanvas"></canvas>
 
 <div class="circuit-lines">
   <svg viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
     <g stroke="#7ab527" stroke-width="1" fill="none">
-      <path d="M0 150 H200 V80 H400"/>
-      <path d="M400 80 H600 V200 H800"/>
-      <path d="M0 350 H100 V420 H300 V350 H500"/>
-      <path d="M500 350 H700 V280 H800"/>
-      <path d="M150 0 V100 H250 V200"/>
-      <path d="M600 0 V150 H700 V300"/>
-      <path d="M50 600 V500 H200 V420"/>
-      <path d="M700 600 V480 H600 V380"/>
+      <path d="M0 150 H200 V80 H400"/><path d="M400 80 H600 V200 H800"/>
+      <path d="M0 350 H100 V420 H300 V350 H500"/><path d="M500 350 H700 V280 H800"/>
+      <path d="M150 0 V100 H250 V200"/><path d="M600 0 V150 H700 V300"/>
+      <path d="M50 600 V500 H200 V420"/><path d="M700 600 V480 H600 V380"/>
     </g>
     <g fill="#7ab527">
       <circle cx="200" cy="150" r="3"/><circle cx="400" cy="80"  r="3"/>
@@ -290,29 +179,24 @@
 
 <div class="glass-card">
   <div class="container">
-
     <div class="avatar-wrap">
       <div class="avatar-ring"></div>
-      <img class="avatar" src="propic.png" alt="Quazi Reshoan Yazdi">
+      <img class="avatar" src="egen.jpeg" alt="Quazi Reshoan Yazdi">
     </div>
-
     <h1>Quazi Reshoan Yazdi</h1>
-    <span class="role-badge">⚙ Junior DevOps Engineer</span>
-
+    <span class="role-badge">&#9881; Junior DevOps Engineer</span>
     <div class="org-block">
       <div class="org-name">eGeneration PLC</div>
       <div class="dept">Business Delivery &amp; Development Department</div>
     </div>
-
     <div class="divider"></div>
-
     <div class="contact-list">
       <div class="contact-row">
-        <span class="icon-dot">📍</span>
+        <span class="icon-dot">&#128205;</span>
         <span>Dhaka, Bangladesh</span>
       </div>
       <div class="contact-row">
-        <span class="icon-dot">📱</span>
+        <span class="icon-dot">&#128242;</span>
         <span>
           <a href="tel:+8801722388407">+8801722-388407</a>
           <span class="wa-badge">
@@ -322,103 +206,129 @@
         </span>
       </div>
       <div class="contact-row">
-        <span class="icon-dot">📧</span>
-        <a href="/cdn-cgi/l/email-protection#28595d495241065a4d5b40474946684d4f4d464d5a495c414746064b47"><span class="__cf_email__" data-cfemail="047571657e6d2a7661776c6b656a446163616a617665706d6b6a2a676b">[email&#160;protected]</span></a>
+        <span class="icon-dot">&#128231;</span>
+        <a href="mailto:quazi.reshoan@egeneration.co">quazi.reshoan@egeneration.co</a>
       </div>
       <div class="contact-row">
-        <span class="icon-dot">🔗</span>
+        <span class="icon-dot">&#128279;</span>
         <a href="https://www.linkedin.com/in/quazi-reshoan-yazdi-dhaka1207" target="_blank">LinkedIn Profile</a>
       </div>
     </div>
-
     <button class="save-btn" onclick="downloadVCF()">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
       Save to Contacts
     </button>
-
-    <footer>© 2025 Quazi Reshoan Yazdi · eGeneration PLC</footer>
+    <footer>&copy; 2025 Quazi Reshoan Yazdi &middot; eGeneration PLC</footer>
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-(function() {
-  const canvas = document.getElementById('pixelCanvas');
-  const colors = ['#7ab527','#3d9bd4','#f5a800','#5a8a1a','#2a72a0'];
-  const sizes  = [8, 12, 16, 20];
+<script>
+/* Floating pixel squares — Canvas 2D + requestAnimationFrame */
+(function () {
+  var canvas = document.getElementById('pixelCanvas');
+  var ctx    = canvas.getContext('2d');
 
-  /* Inject keyframes for pixel drift into a <style> tag */
-  const style = document.createElement('style');
-  let kfCSS = '';
-  const VARIANTS = 12;
-  for (let v = 0; v < VARIANTS; v++) {
-    const dx1 = (Math.random()*60-30).toFixed(1);
-    const dy1 = (Math.random()*60-30).toFixed(1);
-    const dx2 = (Math.random()*60-30).toFixed(1);
-    const dy2 = (Math.random()*60-30).toFixed(1);
-    const dx3 = (Math.random()*60-30).toFixed(1);
-    const dy3 = (Math.random()*60-30).toFixed(1);
-    const r1  = (Math.random()*20-10).toFixed(1);
-    const r2  = (Math.random()*20-10).toFixed(1);
-    kfCSS += `
-    @keyframes px${v} {
-      0%   { transform: translate(0px, 0px) rotate(0deg); }
-      25%  { transform: translate(${dx1}px, ${dy1}px) rotate(${r1}deg); }
-      50%  { transform: translate(${dx2}px, ${dy2}px) rotate(${r2}deg); }
-      75%  { transform: translate(${dx3}px, ${dy3}px) rotate(${r1}deg); }
-      100% { transform: translate(0px, 0px) rotate(0deg); }
-    }`;
+  var COLORS = [
+    [122,181, 39],
+    [ 61,155,212],
+    [245,168,  0],
+    [ 90,138, 26],
+    [ 42,114,160]
+  ];
+
+  function resize() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
   }
-  /* Circuit layer slow drift */
-  kfCSS += `
-  @keyframes circuitDrift {
-    0%   { transform: translate(0px,   0px)   rotate(0deg); }
-    33%  { transform: translate(18px,  12px)  rotate(0.4deg); }
-    66%  { transform: translate(-12px, 20px)  rotate(-0.3deg); }
-    100% { transform: translate(0px,   0px)   rotate(0deg); }
+  resize();
+  window.addEventListener('resize', resize);
+
+  var particles = [];
+  for (var i = 0; i < 55; i++) {
+    var sizes = [8, 10, 14, 18];
+    var sz = sizes[Math.floor(Math.random() * 4)];
+    particles.push({
+      bx: Math.random() * window.innerWidth,
+      by: Math.random() * window.innerHeight,
+      size: sz,
+      color: COLORS[Math.floor(Math.random() * COLORS.length)],
+      alpha: 0.08 + Math.random() * 0.11,
+      vx: (Math.random() - 0.5) * 0.25,
+      vy: (Math.random() - 0.5) * 0.25,
+      wax: 18 + Math.random() * 28,
+      way: 18 + Math.random() * 28,
+      wfx: 0.00025 + Math.random() * 0.0003,
+      wfy: 0.00025 + Math.random() * 0.0003,
+      wpx: Math.random() * Math.PI * 2,
+      wpy: Math.random() * Math.PI * 2,
+      rot: Math.random() * Math.PI * 2,
+      rs:  (Math.random() - 0.5) * 0.004
+    });
   }
-  .circuit-lines { animation: circuitDrift 28s ease-in-out infinite; }
-  `;
-  style.textContent = kfCSS;
-  document.head.appendChild(style);
 
-  /* Build SVG with individually animating pixel rects */
-  const svgNS = 'http://www.w3.org/2000/svg';
-  const svg   = document.createElementNS(svgNS, 'svg');
-  svg.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;overflow:visible';
+  function draw(ts) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  for (let i = 0; i < 55; i++) {
-    const r    = document.createElementNS(svgNS,'rect');
-    const s    = sizes[Math.floor(Math.random()*sizes.length)];
-    const v    = Math.floor(Math.random()*VARIANTS);
-    const dur  = (14 + Math.random()*18).toFixed(1);
-    const del  = (Math.random()*12).toFixed(1);
+    for (var j = 0; j < particles.length; j++) {
+      var p = particles[j];
 
-    r.setAttribute('x',      (Math.random()*98)+'%');
-    r.setAttribute('y',      (Math.random()*98)+'%');
-    r.setAttribute('width',  s);
-    r.setAttribute('height', s);
-    r.setAttribute('rx',     2);
-    r.setAttribute('fill',   colors[Math.floor(Math.random()*colors.length)]);
-    r.setAttribute('opacity',(0.08+Math.random()*0.11).toFixed(2));
-    r.style.animation = `px${v} ${dur}s ${del}s ease-in-out infinite`;
-    r.style.transformBox      = 'fill-box';
-    r.style.transformOrigin   = 'center';
-    svg.appendChild(r);
+      p.bx += p.vx;
+      p.by += p.vy;
+      if (p.bx < -40) p.bx = canvas.width  + 40;
+      if (p.bx > canvas.width  + 40) p.bx = -40;
+      if (p.by < -40) p.by = canvas.height + 40;
+      if (p.by > canvas.height + 40) p.by = -40;
+
+      p.rot += p.rs;
+
+      var wx = Math.sin(ts * p.wfx + p.wpx) * p.wax;
+      var wy = Math.cos(ts * p.wfy + p.wpy) * p.way;
+      var x  = p.bx + wx;
+      var y  = p.by + wy;
+      var h  = p.size / 2;
+      var c  = p.color;
+
+      ctx.save();
+      ctx.translate(x + h, y + h);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + p.alpha + ')';
+      ctx.beginPath();
+      if (ctx.roundRect) {
+        ctx.roundRect(-h, -h, p.size, p.size, 2);
+      } else {
+        ctx.rect(-h, -h, p.size, p.size);
+      }
+      ctx.fill();
+      ctx.restore();
+    }
+
+    requestAnimationFrame(draw);
   }
-  canvas.appendChild(svg);
+  requestAnimationFrame(draw);
 })();
 
+/* VCF download */
 function downloadVCF() {
-  const vcard =
-`BEGIN:VCARD
-VERSION:3.0
-N:Yazdi;Quazi Reshoan;;;
-FN:Quazi Reshoan Yazdi
-TITLE:Junior DevOps Engineer
-ORG:eGeneration PLC;Business Delivery & Development Department
-TEL;TYPE=CELL:+8801722388407
-EMAIL;TYPE=WORK:quazi.reshoan@egeneration.co
-URL:https://www.linkedin.com/in/quazi-reshoan-yazdi-dhaka1207
-END:VCARD`;
+  var vcard = [
+    'BEGIN:VCARD',
+    'VERSION:3.0',
+    'N:Yazdi;Quazi Reshoan;;;',
+    'FN:Quazi Reshoan Yazdi',
+    'TITLE:Junior DevOps Engineer',
+    'ORG:eGeneration PLC;Business Delivery & Development Department',
+    'TEL;TYPE=CELL:+8801722388407',
+    'EMAIL;TYPE=WORK:quazi.reshoan@egeneration.co',
+    'URL:https://www.linkedin.com/in/quazi-reshoan-yazdi-dhaka1207',
+    'END:VCARD'
+  ].join('\n');
 
-  const a = docu
+  var a = document.createElement('a');
+  a.href     = 'data:text/vcard;charset=utf-8,' + encodeURIComponent(vcard);
+  a.download = 'Quazi_Reshoan_Yazdi_eGeneration.vcf';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+</script>
+</body>
+</html>
