@@ -214,7 +214,7 @@
         <a href="https://www.linkedin.com/in/quazi-reshoan-yazdi-dhaka1207" target="_blank">LinkedIn Profile</a>
       </div>
     </div>
-    <button class="save-btn" onclick="downloadVCF()">
+    <button class="save-btn" onclick="saveContact()">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
       Save to Contacts
     </button>
@@ -307,8 +307,8 @@
   requestAnimationFrame(draw);
 })();
 
-/* VCF download */
-function downloadVCF() {
+/* Save contact: hand the vCard to the OS so it can offer "Add to Contacts" */
+function saveContact() {
   var vcard = [
     'BEGIN:VCARD',
     'VERSION:3.0',
@@ -320,14 +320,38 @@ function downloadVCF() {
     'EMAIL;TYPE=WORK:quazi.reshoan@egeneration.co',
     'URL:https://www.linkedin.com/in/quazi-reshoan-yazdi-dhaka1207',
     'END:VCARD'
-  ].join('\n');
+  ].join('\r\n');
 
-  var a = document.createElement('a');
-  a.href     = 'data:text/vcard;charset=utf-8,' + encodeURIComponent(vcard);
-  a.download = 'Quazi_Reshoan_Yazdi_eGeneration.vcf';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
+  var filename = 'Quazi_Reshoan_Yazdi_eGeneration.vcf';
+  var blob = new Blob([vcard], { type: 'text/vcard' });
+
+  /* Mobile (iOS/Android): Web Share API surfaces the OS "Add Contact" sheet directly */
+  if (navigator.canShare) {
+    var file = new File([blob], filename, { type: 'text/vcard' });
+    if (navigator.canShare({ files: [file] })) {
+      navigator.share({ files: [file], title: 'Quazi Reshoan Yazdi' }).catch(function () {});
+      return;
+    }
+  }
+
+  var url = URL.createObjectURL(blob);
+  var ua = navigator.userAgent || '';
+  var isIOS = /iPad|iPhone|iPod/.test(ua) ||
+              (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+  if (isIOS) {
+    /* Navigating directly (no download attribute) lets Safari open its native vCard preview */
+    window.location.href = url;
+  } else {
+    var a = document.createElement('a');
+    a.href     = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
+
+  setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
 }
 </script>
 </body>
