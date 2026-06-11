@@ -190,6 +190,11 @@
     .profile-info { align-items: center; }
     .role-badge { align-self: center; }
   }
+
+  @media (min-width: 640px) {
+    .glass-card { max-width: 640px; }
+    .bento-grid { grid-template-columns: repeat(3, 1fr); }
+  }
   .save-btn {
     margin-top: 20px; width: 100%;
     background: linear-gradient(135deg, var(--eg-green) 0%, var(--eg-blue) 100%);
